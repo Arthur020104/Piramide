@@ -1,5 +1,21 @@
 {% extends "PiramideCs/layout.html" %}
-{% block title %}Receitas{% endblock %}
+{% block title %}Home{% endblock %}
 {% block body %}
 
+    <h2 class="text-center title">Home</h2>
+
+    {% if message %}
+        <div id="message" class="alert alert-danger" >{{ message }}</div>
+    {% endif %}
+    <div class="container text-center">
+        <h1>Apostar</h1>
+        <form action="{% url 'register'%}" method="post">
+            {% csrf_token%}
+            <div class="form-group">
+                <input class="form-control" autocomplete="off" autofocus type="number" name="betAmount" placeholder="Valor da Aposta">
+            </div>
+            <input type="submit" value="APOSTAR!" class="btn form-btn button-dark-mode">
+        </form>
+    </div>
+    
 {% endblock %}

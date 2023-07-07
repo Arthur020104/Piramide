@@ -37,7 +37,7 @@ nav
 }
 .button-dark-mode:hover
 {
-    /*background-color: rgb(19, 255, 0)!important;*/
+    background-color: rgb(19, 255, 0)!important;
     color: #000!important;
     border-color: #000!important;
 }
