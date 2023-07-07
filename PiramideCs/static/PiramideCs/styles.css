@@ -22,7 +22,18 @@ nav
     padding-inline-start: var(--chakra-space-16)!important;
     padding-inline-end: var(--chakra-space-16)!important;
 }
-
+.sub_text
+{
+    font-weight: bold;
+    font-size: 0.65rem!important;
+}
+div.alert-su
+{
+    --bs-alert-color: rgb(11 137 0);
+    --bs-alert-bg: rgb(19 255 0 / 18%);
+    --bs-alert-border-color: rgb(19, 255, 0);
+    --bs-alert-link-color: var(--bs-success-text-emphasis);
+}
 .dark-mode-body
 {
     color: #e3e3e3!important;

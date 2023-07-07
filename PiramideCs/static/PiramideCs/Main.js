@@ -9,6 +9,10 @@ function dark()
     }
     
   });
+  let alerts = document.querySelectorAll('.alert-su');
+  alerts.forEach(alert =>{
+    alert.classList.toggle("DarkSucess");
+  });
   /*
   let navlink = document.querySelectorAll('.nav-link');
   navlink.forEach(navlk =>{

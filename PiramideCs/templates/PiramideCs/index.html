@@ -1,20 +1,32 @@
 {% extends "PiramideCs/layout.html" %}
 {% block title %}Home{% endblock %}
 {% block body %}
-
-    <h2 class="text-center title">Home</h2>
-
     {% if message %}
-        <div id="message" class="alert alert-danger" >{{ message }}</div>
+        <div id="message" class="alert alert-danger" role="alert" >{{ message }}</div>
     {% endif %}
+    {% if message_sucess%}
+        <div id="message_sucess" class="alert alert-su" role="alert" >{{ message_sucess }}</div>
+    {% endif %}
+
     <div class="container text-center">
         <h1>Apostar</h1>
-        <form action="{% url 'register'%}" method="post">
+        <form action="{% url 'index'%}" method="post">
             {% csrf_token%}
             <div class="form-group">
                 <input class="form-control" autocomplete="off" autofocus type="number" name="betAmount" placeholder="Valor da Aposta">
             </div>
-            <input type="submit" value="APOSTAR!" class="btn form-btn button-dark-mode">
+            <div class="form-group">
+            {%if user.CanPlayIn == 0 %}
+                <input type="submit" value="APOSTAR!" class="btn form-btn button-dark-mode">
+                </div>
+                <div class="form-group">
+                <text class= "sub_text">LIVRE PARA FAZER DINHEIRO</text></div>
+            {% else %}
+                <input disabled  type="submit" value="APOSTAR!" class="btn form-btn button-dark-mode">
+                </div>
+                <div class="form-group">
+                <text class= "sub_text"> SÓ PODE APOSTAR EM  {{user.CanPlayIn}} HORAS</text></div>
+            {%endif%}
         </form>
     </div>
     

@@ -6,10 +6,15 @@ from django.utils import timezone
 from datetime import timedelta
 
 # Create your models here.
-
+def subtractTwelve():
+    return (timezone.now()- timedelta(hours=12, minutes=0))
 class User(AbstractUser):
-    _saldo = models.FloatField()
-    DateofPlay = models.DateField()
+
+    _saldo = models.FloatField(("DateofPlay"),default=0)
+    DateofPlay = models.DateTimeField(("DateofPlay"), default=subtractTwelve)
+    user_permissions = None
+    groups =None
+    """
     user_permissions = models.ManyToManyField(
     "auth.Permission",
     verbose_name="user permissions",
@@ -22,16 +27,7 @@ class User(AbstractUser):
         blank=True,
         related_name="custom_user_set"  # Add a unique related_name
     )
-    def __init__(self, *args, **kwargs):
-        saldo = kwargs.pop('_saldo', None)
-        date_of_play = kwargs.pop('DateofPlay', None)
-        
-        super().__init__(*args, **kwargs)
-
-        if saldo is not None:
-            self._saldo = saldo
-        if date_of_play is not None:
-            self.DateofPlay = date_of_play
+    """
     def _returnedValue(self,betAmount):
         winPercentTableDays = [125, 75, -25]
         winPercentTableUsers = [100,25,-2000]
@@ -57,22 +53,14 @@ class User(AbstractUser):
             my_datetime = self.DateofPlay
             time_difference = current_time - my_datetime
             hours_difference = time_difference.total_seconds() / 3600
-            
-            hours_difference = 0 if hours_difference > 12 else 12 - int(hours_difference)
             print(hours_difference)
-            return hours_difference
-        elif self.DateofPlay is None:
-            print(self.DateofPlay)
-            self.DateofPlay = timezone.now()
-            print("hreaaaaaaaaa")
-            
-            return 10
+            hours_difference = 0 if hours_difference <= 0 else hours_difference
+            return int(hours_difference)
     def Play(self,betAmount):
         if(self.CanPlayIn() == 0):
             try: 
                 returnedV = self._returnedValue(betAmount)
                 self.DateofPlay = timezone.now()
-                print(self.CanPlayIn())
                 return returnedV
             except:
                 return False
