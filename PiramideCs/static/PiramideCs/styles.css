@@ -1,0 +1,143 @@
+@import url(//db.onlinewebfonts.com/c/5448e532a6df5b5dc0f331bab0f7508f?family=TussilagoW05-Book);
+body
+{
+    font-family: "TussilagoW05-Book", Arial!important;
+    background-color: #cacaca;
+    transition: color .15s ease-in-out,background-color .25s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    font-weight: 800;
+}
+nav
+{
+    border-bottom: 1px solid #fff!important;;
+    display: flex!important;
+    flex-direction: column!important;
+    -webkit-box-align: center!important;
+    align-items: center!important;
+    -webkit-box-pack: center!important;
+    justify-content: center!important;
+    top: 0px!important;
+    width: var(--chakra-sizes-full)!important;
+    padding: 0px!important;
+    height: 71.5px!important;
+    padding-inline-start: var(--chakra-space-16)!important;
+    padding-inline-end: var(--chakra-space-16)!important;
+}
+
+.dark-mode-body
+{
+    color: #e3e3e3!important;
+    background-color: #000!important;
+    border-color: #000!important;
+}
+.button-dark-mode
+{
+    /*background-color: #000!important;*/
+    color: rgb(19, 255, 0)!important;
+    border-color: rgb(19, 255, 0)!important;
+}
+.button-dark-mode:hover
+{
+    /*background-color: rgb(19, 255, 0)!important;*/
+    color: #000!important;
+    border-color: #000!important;
+}
+.nav-item
+{
+    padding-left: 5.5rem!important;
+    padding-right: 5.5em!important;
+}
+.dark-mode-nav
+{
+    color: #e3e3e3!important;
+    background-color: #212121!important;
+}
+.dark-nav
+{
+    color: #e3e3e3!important;
+    
+}
+.navbar-brand
+{
+    font-size: 1rem!important;
+}
+.nav-link:hover
+{
+    border: 1px solid rgb(19, 255, 0)!important;
+    background-color: #1a1a1a!important;
+}
+.nav-link
+{
+    border: 0px solid rgb(19, 255, 0)!important;
+    font-size: 0.9rem!important;
+    font-weight: bold!important;
+}
+
+.page-link-dark-mode.disable
+{
+    color: #e3e3e3!important;
+}
+.page-link.page-link-dark-mode
+{
+    color: rgb(19, 255, 0);
+}
+.page-link.page-link-dark-mode:hover
+{
+    color: rgb(19, 255, 0);
+}
+.whiteFontColor
+{
+    color: #fff!important;
+    font-weight: bolder;
+}
+
+.textarea-dark
+{
+    background-color: #000!important;
+    border: 1px solid #e3e3e3!important;
+    color: #fff!important;
+}
+.textarea-dark::placeholder
+{
+    color: #7d7d7d!important;
+}
+.toggler-icon-dark
+{
+    border-color: rgb(19, 255, 0)!important;
+    background-color: rgb(19, 255, 0)!important;
+}
+.container-black
+{
+    background-color: #000!important;
+}
+
+.col-sm-black
+{
+    background-color: #212121!important;
+}
+
+.separation_border-dark-mode
+{
+    color: #e3e3e3;
+    background-color: #1a1a1a;
+}
+.form-btn
+{
+    color: rgb(19, 255, 0)!important;
+    border-color: rgb(19, 255, 0)!important;
+    background-color: #212121!important;
+}
+*:focus {
+    outline: none!important;
+}
+.form-control:focus
+{
+    border-color: rgb(19, 255, 0)!important;
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(17,255,0,1)!important;
+    -moz-box-shadow: 0px 0px 3px 1px rgba(17,255,0,1)!important;
+    box-shadow: 0px 0px 3px 1px rgba(17,255,0,1)!important;
+}
+.form-group
+{
+    padding-bottom: 0.5rem!important;
+    padding-top: 0.5rem !important;
+}
