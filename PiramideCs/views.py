@@ -5,9 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import reverse
 from .models import User
-
+from django.core.exceptions import PermissionDenied
+login_url= "/Login"
 # Create your views here.
-@login_required(login_url="/Login")
+@login_required(login_url=login_url)
 def index(request):
     userId = request.user.id
     user = User.objects.get(pk = userId)
@@ -23,6 +24,7 @@ def index(request):
             })
         jogada = user.Play(betAmount)
         print(user.CanPlayIn())
+        print(jogada)
         
         if not jogada:
             return render(request,"PiramideCs/index.html", {
@@ -35,7 +37,7 @@ def index(request):
         
         
 
-@login_required(login_url="/Login")
+@login_required(login_url=login_url)
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
@@ -83,3 +85,54 @@ def login_view(request):
             return HttpResponseRedirect(reverse("index"))
 
     return render(request, "PiramideCs/login.html")
+@login_required(login_url=login_url)
+def carteira(request,message=None, message_sucess=None):
+    user = User.objects.get(pk= request.user.id)
+    if message:
+        return render(request,"PiramideCs/carteira.html",{
+                "user":user,
+                "message":message["ERRO"]
+                }) 
+    elif message_sucess:
+        return render(request,"PiramideCs/carteira.html",{
+            "user":user,
+            "message_sucess":message_sucess["Sucess"]
+            })
+    
+    if request.method == "GET":
+        return render(request,"PiramideCs/carteira.html",{
+            "user":user
+            })
+    else:
+        try:
+            withdrawValue = float(request.POST["withdrawValue"])
+        except:
+            return render(request,"PiramideCs/carteira.html",{
+            "user":user,
+            "message":"Necessário fornecer um valor válido."
+            })
+        saldo = user.Withdraw(withdrawValue)
+        
+        if(saldo):
+            return render(request,"PiramideCs/carteira.html",{
+                "user":user,
+                "message_sucess":f"Saque efetuado com sucesso."
+                })
+        else:
+            return render(request,"PiramideCs/carteira.html",{
+                "user":user,
+                "message":"[ERRO] Saque inválido."
+                })
+@login_required(login_url=login_url)
+def deposite(request):
+    if request.method == "POST":
+        try:
+            depositeValue = float(request.POST["depositeValue"])
+            user = User.objects.get(pk=request.user.id)
+            user.deposite(depositeValue)
+        except:
+           carteira(request,{"ERRO":"Necessário fornecer um valor válido."})
+        return carteira(request,None,{"Sucess":"Deposito efetuado com sucesso."})
+    else:
+        raise PermissionDenied()
+    
