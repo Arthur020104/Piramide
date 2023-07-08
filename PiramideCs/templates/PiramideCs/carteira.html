@@ -1,0 +1,27 @@
+{% extends "PiramideCs/layout.html" %}
+{% block title %}Cateira{% endblock %}
+{% block body %}
+
+      {% if message %}
+          <div id="message" class="alert alert-danger" >{{ message }}</div>
+      {% endif %}
+        <div class="container text-center">
+            <h1>CARTEIRA</h1>
+            <div>
+                <text style="padding-rigth: 7%;" class= "sub_text">ULTIMA APOSTA: --data</text><text style="padding-left: 7%;" class= "sub_text">SALDO: --valor</text>
+            </div>
+        
+        </div>
+        <div style="width:18%;padding-top: 10%;" class="container text-center">
+            <h3>SAQUE</h3>
+            <form action="{% url 'carteira'%}" method="post">
+                <!--{% csrf_token%}-->
+                <div class="form-group">
+                    <input  class="form-control" autocomplete="off" autofocus type="number" name="betAmount" placeholder="Valor da Aposta">
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="SACAR" class="btn form-btn button-dark-mode">
+                </div>
+            </form>
+        </div>
+{% endblock %}
