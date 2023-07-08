@@ -22,15 +22,18 @@ def index(request):
                 "message": "Precisa fornecer um número."
             })
         jogada = user.Play(betAmount)
-        print(jogada)
+        print(user.CanPlayIn())
+        
         if not jogada:
             return render(request,"PiramideCs/index.html", {
                 "message": "Jogada inválida."
             })
         else:
             return render(request,"PiramideCs/index.html", {
-                "message_sucess": jogada
+                "message_sucess": jogada,"afthermatch": "SÓ PODE APOSTAR EM 12 HORAS"
             })
+        
+        
 
 @login_required(login_url="/Login")
 def logout_view(request):

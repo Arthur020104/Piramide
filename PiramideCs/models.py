@@ -10,24 +10,10 @@ def subtractTwelve():
     return (timezone.now()- timedelta(hours=12, minutes=0))
 class User(AbstractUser):
 
-    _saldo = models.FloatField(("DateofPlay"),default=0)
+    _saldo = models.FloatField(("Saldo"),default=0)
     DateofPlay = models.DateTimeField(("DateofPlay"), default=subtractTwelve)
     user_permissions = None
     groups =None
-    """
-    user_permissions = models.ManyToManyField(
-    "auth.Permission",
-    verbose_name="user permissions",
-    blank=True,
-    related_name="custom_user_set"  # Add a unique related_name
-    )
-    groups = models.ManyToManyField( 
-        "auth.Group",
-        verbose_name="groups",
-        blank=True,
-        related_name="custom_user_set"  # Add a unique related_name
-    )
-    """
     def _returnedValue(self,betAmount):
         winPercentTableDays = [125, 75, -25]
         winPercentTableUsers = [100,25,-2000]
@@ -50,17 +36,19 @@ class User(AbstractUser):
     def CanPlayIn(self):
         if self.DateofPlay != None:
             current_time = timezone.now()
-            my_datetime = self.DateofPlay
-            time_difference = current_time - my_datetime
+            self.DateofPlay
+            time_difference = current_time - self.DateofPlay
             hours_difference = time_difference.total_seconds() / 3600
-            print(hours_difference)
-            hours_difference = 0 if hours_difference <= 0 else hours_difference
+            #print(hours_difference)
+            hours_difference = 0 if hours_difference >= 12  else 12 - hours_difference
+            #print(hours_difference,current_time,self.DateofPlay)
             return int(hours_difference)
     def Play(self,betAmount):
         if(self.CanPlayIn() == 0):
             try: 
                 returnedV = self._returnedValue(betAmount)
                 self.DateofPlay = timezone.now()
+                self.save()
                 return returnedV
             except:
                 return False
@@ -76,9 +64,11 @@ class User(AbstractUser):
     def _setSaldo(self,newValue):
         try:
             newValue = float(newValue)
-            return True
         except:
             return False
+        self._saldo = newValue
+        self.save()
+        return True
     def Withdraw(self,withdrawValue):
         isValidToWithdraw = None
         if self.getSaldo():
@@ -92,4 +82,4 @@ class User(AbstractUser):
         else:
             return False
     def _str_(self):
-        return f""
+        return f"{self.id}: {self.username}."
