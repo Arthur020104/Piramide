@@ -4,7 +4,6 @@ from django.utils import timezone
 import random
 from django.utils import timezone
 from datetime import timedelta
-
 # Create your models here.
 def subtractTwelve():
     return (timezone.now()- timedelta(hours=12, minutes=0))
@@ -12,25 +11,31 @@ class User(AbstractUser):
 
     _saldo = models.FloatField(("Saldo"),default=0)
     DateofPlay = models.DateTimeField(("DateofPlay"), default=subtractTwelve)
+    BlockWithdraw = models.BooleanField(default=False)
+    amountOfBets = models.IntegerField(("Jogadas"),default=0)
     user_permissions = None
     groups =None
     def _returnedValue(self,betAmount):
-        winPercentTableDays = [125, 75, -25]
+        if betAmount < 0:
+            return False
+        winPercentTableDays = [125, 100, 75, 50, 25, 0, -25]
         winPercentTableUsers = [100,25,-2000]
         accountDays = int((timezone.now() - self.date_joined).days)#days after account initiation
-        accountDays = 0 if accountDays < 5 else 1 if accountDays < 12 else 2
+        accountDays = accountDays + int(self.amountOfBets/2) if accountDays + int(self.amountOfBets/2) < 6 else 6
         amountofUsers = int(User.objects.all().count())
         amountofUsers = 0 if amountofUsers < 3 else 1 if amountofUsers < 7 else 2
         totalPercent = winPercentTableDays[accountDays] + winPercentTableUsers[amountofUsers]
-        totalPercent = random.randrange(totalPercent-10,totalPercent+ totalPercent *5)#variation +-10%
+        totalPercent = totalPercent if  totalPercent <=0 else random.randrange(totalPercent-10,totalPercent+ totalPercent *2)
         if(totalPercent <= -100):
-            return "[Erro]: Problema no saque, entre em contato com o nosso suporte na aba suporte."
+            self.BlockWithdraw = True
+            self.save()
+            return "[Erro]: Problema na aposta, entre em contato com o nosso suporte na aba suporte."
         else:
             total = betAmount * (1+ (totalPercent/100) )
             newValue = self.getSaldo() + total
             self._setSaldo(newValue)
             if totalPercent > 0:
-                return f"Você ganhou {totalPercent}% do seu valor inicial, totalizando em {total}."
+                return f"Você ganhou {totalPercent}% do seu valor inicial, totalizando em {round(total,2)}."
             else:
                 return f"Não foi dessa vez, seu total é {total}."
     def CanPlayIn(self):
@@ -45,17 +50,26 @@ class User(AbstractUser):
             return int(hours_difference)
     def Play(self,betAmount):
         if(self.CanPlayIn() == 0):
-            try: 
-                returnedV = self._returnedValue(betAmount)
-                self.DateofPlay = timezone.now()
-                self.save()
+            try:
+                if self.getSaldo() >= betAmount:
+                    self._setSaldo(self.getSaldo() - betAmount)
+                    self.save()
+                    returnedV = self._returnedValue(betAmount)
+                    self.DateofPlay = timezone.now()
+                    self.amountOfBets +=1
+                    self.save()
                 return returnedV
             except:
                 return False
         else:
             False
 
-        
+    def deposite(self,valor):
+        if valor <=0:
+            return False
+        else:
+            x = self._setSaldo((self.getSaldo()+valor))
+            return x
     def getSaldo(self):
         if self._saldo:   
             return self._saldo
@@ -72,7 +86,7 @@ class User(AbstractUser):
     def Withdraw(self,withdrawValue):
         isValidToWithdraw = None
         if self.getSaldo():
-            isValidToWithdraw = self.getSaldo() > 0
+            isValidToWithdraw = self.getSaldo() > 0 and self.getSaldo() >= withdrawValue and not self.BlockWithdraw
         if(isValidToWithdraw):
             try:  
                 newValue = self.getSaldo() - withdrawValue
